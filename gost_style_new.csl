@@ -5,18 +5,18 @@
        default-locale="ru-RU">
 
   <info>
-    <title>GOST R 7.0.5-2008 (Author-Date) for Mendeley Reference Manager</title>
-
+    <title>GOST R 7.0.5-2008 (Author-Date) for Mendeley Cite (Word) — Ivan Novoselov</title>
     <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-author-date-ivan-novoselov</id>
 
     <author>
-      <name>Ivan Novoselov (adapted/fixed)</name>
+      <name>Ivan Novoselov</name>
     </author>
 
     <category citation-format="author-date"/>
     <category field="generic-base"/>
 
-    <updated>2026-02-06T00:00:00+00:00</updated>
+    <!-- Дата НЕ в будущем (Mendeley Cite иногда капризничает) -->
+    <updated>2024-08-04T00:00:00+00:00</updated>
     <rights>CC BY-SA 3.0</rights>
   </info>
 
@@ -42,11 +42,12 @@
 
   <macro name="day-month">
     <date variable="issued">
-      <date-part name="day" form="numeric" suffix="&#160;"/>
+      <date-part name="day" form="numeric" suffix=" "/>
       <date-part name="month" form="short"/>
     </date>
   </macro>
 
+  <!-- Cite-safe: без табов/контрольных символов -->
   <macro name="citation-number">
     <text variable="citation-number" suffix=". "/>
   </macro>
@@ -72,7 +73,7 @@
     <names variable="author">
       <name form="short"
             name-as-sort-order="all"
-            sort-separator="&#160;"
+            sort-separator=" "
             delimiter=", "
             delimiter-precedes-last="always"/>
       <substitute>
@@ -92,6 +93,8 @@
     </names>
   </macro>
 
+  <!-- ВАЖНО: Cite-safe. НЕЛЬЗЯ <label> без variable внутри <names>.
+       Поэтому печатаем только имена (без "ред./пер./сост.") -->
   <macro name="names-responsibility">
     <names variable="collection-editor editor translator" delimiter="; ">
       <name et-al-min="20" et-al-use-first="1"
@@ -108,7 +111,7 @@
             delimiter=", "
             initialize-with="."
             name-as-sort-order="all"
-            sort-separator="&#160;"/>
+            sort-separator=" "/>
       <substitute>
         <text variable="title"/>
       </substitute>
@@ -141,7 +144,7 @@
   <macro name="volume">
     <choose>
       <if variable="volume">
-        <label variable="volume" form="short" suffix="&#160;" text-case="capitalize-first"/>
+        <label variable="volume" form="short" suffix=" " text-case="capitalize-first"/>
         <text variable="volume"/>
       </if>
     </choose>
@@ -150,7 +153,7 @@
   <macro name="collection-number">
     <choose>
       <if variable="collection-number">
-        <label variable="collection-number" form="short" suffix="&#160;" text-case="capitalize-first"/>
+        <label variable="collection-number" form="short" suffix=" " text-case="capitalize-first"/>
         <text variable="collection-number"/>
       </if>
     </choose>
@@ -161,12 +164,12 @@
       <if variable="number-of-volumes">
         <choose>
           <if variable="language">
-            <text variable="number-of-volumes" prefix="in&#160;"/>
-            <label variable="number-of-volumes" form="short" prefix="&#160;"/>
+            <text variable="number-of-volumes" prefix="in "/>
+            <label variable="number-of-volumes" form="short" prefix=" "/>
           </if>
           <else>
-            <text variable="number-of-volumes" prefix="в&#160;"/>
-            <label variable="number-of-volumes" form="short" prefix="&#160;"/>
+            <text variable="number-of-volumes" prefix="в "/>
+            <label variable="number-of-volumes" form="short" prefix=" "/>
           </else>
         </choose>
       </if>
@@ -176,7 +179,7 @@
   <macro name="pages">
     <choose>
       <if variable="page">
-        <label variable="page" form="short" suffix="&#160;" text-case="capitalize-first"/>
+        <label variable="page" form="short" suffix=" " text-case="capitalize-first"/>
         <text variable="page"/>
       </if>
     </choose>
@@ -186,13 +189,12 @@
     <choose>
       <if variable="number-of-pages">
         <text variable="number-of-pages"/>
-        <label variable="number-of-pages" form="short" prefix="&#160;"/>
+        <label variable="number-of-pages" form="short" prefix=" "/>
       </if>
     </choose>
   </macro>
 
   <macro name="pages-or-volumes">
-    <!-- фикс: если есть number-of-volumes — печатаем его, иначе страницы -->
     <choose>
       <if variable="number-of-volumes">
         <text macro="number-of-volumes"/>
@@ -222,7 +224,7 @@
 
       <choose>
         <if variable="locator">
-          <group prefix=",&#160;" delimiter="&#160;">
+          <group prefix=", " delimiter=" ">
             <label variable="locator" form="short"/>
             <text variable="locator"/>
           </group>
@@ -285,7 +287,7 @@
         </group>
       </else-if>
 
-            <!-- РАЗДЕЛ КНИГИ -->
+      <!-- РАЗДЕЛ КНИГИ -->
       <else-if type="chapter">
         <group delimiter=".">
           <group delimiter=". – ">
@@ -383,7 +385,7 @@
             <text macro="year"/>
             <text macro="volume"/>
             <text variable="title-short"/>
-            <text variable="issue" prefix="№&#160;"/>
+            <text variable="issue" prefix="№ "/>
             <text macro="pages"/>
           </group>
 
@@ -393,7 +395,7 @@
         </group>
       </else-if>
 
-      <!-- СТАТЬЯ (универсальная ветка, на случай если Cite отдаёт не article-journal) -->
+      <!-- СТАТЬЯ (универсальная ветка) -->
       <else-if type="article">
         <group delimiter=".">
           <group delimiter=". – ">
@@ -411,7 +413,7 @@
             <text macro="year"/>
             <text macro="volume"/>
             <text variable="title-short"/>
-            <text variable="issue" prefix="№&#160;"/>
+            <text variable="issue" prefix="№ "/>
             <text macro="pages"/>
           </group>
 
@@ -502,6 +504,3 @@
   </bibliography>
 
 </style>
-
-
-
