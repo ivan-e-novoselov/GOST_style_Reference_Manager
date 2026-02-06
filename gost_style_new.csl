@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl"
        class="in-text"
-       version="1.0"
+       version="1.0.2"
        default-locale="ru-RU">
 
   <info>
     <title>GOST R 7.0.5-2008 (Author-Date) for Mendeley Reference Manager</title>
 
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-author-date-ivan-novoselov</id>
+    <!-- Поставь сюда свой постоянный URL/URN (можно заменить на ссылку raw на GitHub) -->
+    <id>https://example.org/styles/gost-r-7-0-5-2008-author-date-mendeley</id>
 
     <author>
       <name>Ivan Novoselov (adapted/fixed)</name>
@@ -19,6 +20,64 @@
     <updated>2026-02-06T00:00:00+00:00</updated>
     <rights>CC BY-SA 3.0</rights>
   </info>
+
+  <!-- ===================== ЛОКАЛИЗАЦИЯ ТЕРМИНОВ ===================== -->
+
+  <locale xml:lang="en">
+    <terms>
+      <term name="et-al"> et al.</term>
+      <term name="page" form="short">p.</term>
+      <term name="number-of-pages" form="short">p.</term>
+      <term name="number-of-volumes" form="short">vols.</term>
+      <term name="collection-editor" form="short">coll.</term>
+      <term name="translator" form="short">
+        <single>trans.</single>
+        <multiple>trans.</multiple>
+      </term>
+      <term name="editortranslator" form="short">
+        <single>ed. &amp; trans.</single>
+        <multiple>eds. &amp; trans.</multiple>
+      </term>
+    </terms>
+  </locale>
+
+  <locale xml:lang="ru">
+    <terms>
+      <term name="et-al"> и др.</term>
+      <term name="page" form="short">с.</term>
+      <term name="number-of-pages" form="short">с.</term>
+      <term name="number-of-volumes" form="short">т.</term>
+      <term name="collection-editor" form="short">сост.</term>
+      <term name="collection-number" form="short">вып.</term>
+      <term name="translator" form="short">
+        <single>пер.</single>
+        <multiple>пер.</multiple>
+      </term>
+      <term name="editortranslator" form="short">
+        <single>ред. и пер.</single>
+        <multiple>ред. и пер.</multiple>
+      </term>
+
+      <term name="month-01" form="short">янв.</term>
+      <term name="month-02" form="short">февр.</term>
+      <term name="month-03" form="short">марта</term>
+      <term name="month-04" form="short">апр.</term>
+      <term name="month-05" form="short">мая</term>
+      <term name="month-06" form="short">июня</term>
+      <term name="month-07" form="short">июля</term>
+      <term name="month-08" form="short">авг.</term>
+      <term name="month-09" form="short">сент.</term>
+      <term name="month-10" form="short">окт.</term>
+      <term name="month-11" form="short">нояб.</term>
+      <term name="month-12" form="short">дек.</term>
+    </terms>
+  </locale>
+
+  <locale>
+    <terms>
+      <term name="page-range-delimiter">-</term>
+    </terms>
+  </locale>
 
   <!-- ===================== ВСПОМОГАТЕЛЬНЫЕ МАКРОСЫ ===================== -->
 
@@ -48,7 +107,7 @@
   </macro>
 
   <macro name="citation-number">
-    <text variable="citation-number" suffix=". "/>
+    <text variable="citation-number" suffix=".&#9;"/>
   </macro>
 
   <macro name="doi">
@@ -93,12 +152,14 @@
   </macro>
 
   <macro name="names-responsibility">
+    <!-- авторы/редакторы/переводчики после слэша -->
     <names variable="collection-editor editor translator" delimiter="; ">
+      <label form="short" prefix=" " suffix=". " text-case="lowercase" strip-periods="true"/>
       <name et-al-min="20" et-al-use-first="1"
             delimiter=", "
             initialize-with="."
             name-as-sort-order="all"
-            sort-separator=" "/>
+            sort-separator="&#160;"/>
     </names>
   </macro>
 
@@ -207,7 +268,8 @@
 
   <citation et-al-min="4"
             et-al-use-first="1"
-            disambiguate-add-year-suffix="true">
+            disambiguate-add-year-suffix="true"
+            collapse="year">
     <sort>
       <key macro="language-sort"/>
       <key macro="author-short"/>
@@ -285,48 +347,8 @@
         </group>
       </else-if>
 
-            <!-- РАЗДЕЛ КНИГИ -->
-      <else-if type="chapter">
-        <group delimiter=".">
-          <group delimiter=". – ">
-            <group delimiter=" // ">
-              <group delimiter=" ">
-                <text macro="authors-only"/>
-                <text macro="title-with-medium"/>
-              </group>
-
-              <group delimiter=" / ">
-                <group delimiter=" : ">
-                  <group delimiter=" ">
-                    <text variable="container-title"/>
-                    <text variable="event"/>
-                  </group>
-                  <text variable="collection-title"/>
-                  <text macro="number-of-volumes"/>
-                </group>
-
-                <group delimiter=" ">
-                  <text macro="names-responsibility"/>
-                  <text variable="note"/>
-                </group>
-              </group>
-            </group>
-
-            <text macro="publisher"/>
-            <text macro="volume"/>
-            <text macro="collection-number"/>
-            <text variable="title-short"/>
-            <text macro="pages"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </else-if>
-
-      <!-- ДОКЛАД КОНФЕРЕНЦИИ -->
-      <else-if type="paper-conference">
+      <!-- РАЗДЕЛ КНИГИ / КОНФЕРЕНЦИЯ / ЭНЦИКЛОПЕДИЯ -->
+      <else-if type="chapter paper-conference entry-encyclopedia" match="any">
         <group delimiter=".">
           <group delimiter=". – ">
             <group delimiter=" // ">
@@ -366,35 +388,7 @@
       </else-if>
 
       <!-- СТАТЬЯ В ЖУРНАЛЕ -->
-      <else-if type="article-journal">
-        <group delimiter=".">
-          <group delimiter=". – ">
-            <group delimiter=" // ">
-              <group delimiter=" / ">
-                <group delimiter=" ">
-                  <text macro="authors-only"/>
-                  <text macro="title-with-medium"/>
-                  <text variable="collection-title"/>
-                </group>
-              </group>
-              <text variable="container-title"/>
-            </group>
-
-            <text macro="year"/>
-            <text macro="volume"/>
-            <text variable="title-short"/>
-            <text variable="issue" prefix="№&#160;"/>
-            <text macro="pages"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </else-if>
-
-      <!-- СТАТЬЯ (универсальная ветка, на случай если Cite отдаёт не article-journal) -->
-      <else-if type="article">
+      <else-if type="article article-journal article-magazine" match="any">
         <group delimiter=".">
           <group delimiter=". – ">
             <group delimiter=" // ">
@@ -502,7 +496,3 @@
   </bibliography>
 
 </style>
-
-
-
-
