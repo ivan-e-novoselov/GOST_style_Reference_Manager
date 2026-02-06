@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl"
        class="in-text"
-       version="1.0.2"
+       version="1.0"
        default-locale="ru-RU">
 
   <info>
     <title>GOST R 7.0.5-2008 (Author-Date) for Mendeley Reference Manager</title>
 
-    <!-- Поставь сюда свой постоянный URL/URN (можно заменить на ссылку raw на GitHub) -->
-    <id>https://example.org/styles/gost-r-7-0-5-2008-author-date-mendeley</id>
+    <!--  -->
+    <id>https://github.com/ivan-e-novoselov/GOST_style_Reference_Manager</id>
 
     <author>
       <name>Ivan Novoselov (adapted/fixed)</name>
@@ -347,8 +347,48 @@
         </group>
       </else-if>
 
-      <!-- РАЗДЕЛ КНИГИ / КОНФЕРЕНЦИЯ / ЭНЦИКЛОПЕДИЯ -->
-      <else-if type="chapter paper-conference entry-encyclopedia" match="any">
+            <!-- РАЗДЕЛ КНИГИ -->
+      <else-if type="chapter">
+        <group delimiter=".">
+          <group delimiter=". – ">
+            <group delimiter=" // ">
+              <group delimiter=" ">
+                <text macro="authors-only"/>
+                <text macro="title-with-medium"/>
+              </group>
+
+              <group delimiter=" / ">
+                <group delimiter=" : ">
+                  <group delimiter=" ">
+                    <text variable="container-title"/>
+                    <text variable="event"/>
+                  </group>
+                  <text variable="collection-title"/>
+                  <text macro="number-of-volumes"/>
+                </group>
+
+                <group delimiter=" ">
+                  <text macro="names-responsibility"/>
+                  <text variable="note"/>
+                </group>
+              </group>
+            </group>
+
+            <text macro="publisher"/>
+            <text macro="volume"/>
+            <text macro="collection-number"/>
+            <text variable="title-short"/>
+            <text macro="pages"/>
+          </group>
+
+          <group prefix=" " delimiter=" ">
+            <text macro="doi"/>
+          </group>
+        </group>
+      </else-if>
+
+      <!-- ДОКЛАД КОНФЕРЕНЦИИ -->
+      <else-if type="paper-conference">
         <group delimiter=".">
           <group delimiter=". – ">
             <group delimiter=" // ">
@@ -388,7 +428,35 @@
       </else-if>
 
       <!-- СТАТЬЯ В ЖУРНАЛЕ -->
-      <else-if type="article article-journal article-magazine" match="any">
+      <else-if type="article-journal">
+        <group delimiter=".">
+          <group delimiter=". – ">
+            <group delimiter=" // ">
+              <group delimiter=" / ">
+                <group delimiter=" ">
+                  <text macro="authors-only"/>
+                  <text macro="title-with-medium"/>
+                  <text variable="collection-title"/>
+                </group>
+              </group>
+              <text variable="container-title"/>
+            </group>
+
+            <text macro="year"/>
+            <text macro="volume"/>
+            <text variable="title-short"/>
+            <text variable="issue" prefix="№&#160;"/>
+            <text macro="pages"/>
+          </group>
+
+          <group prefix=" " delimiter=" ">
+            <text macro="doi"/>
+          </group>
+        </group>
+      </else-if>
+
+      <!-- СТАТЬЯ (универсальная ветка, на случай если Cite отдаёт не article-journal) -->
+      <else-if type="article">
         <group delimiter=".">
           <group delimiter=". – ">
             <group delimiter=" // ">
@@ -496,3 +564,4 @@
   </bibliography>
 
 </style>
+
