@@ -3,12 +3,11 @@
        class="in-text"
        version="1.0"
        default-locale="ru-RU"
-       demote-non-dropping-particle="sort-only"
-       page-range-format="expanded">
+       demote-non-dropping-particle="sort-only">
 
   <info>
-    <title>GOST R 7.0.5-2008 (Numeric, RU/EN labels, et al logic) — Ivan Novoselov (custom)</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v2</id>
+    <title>GOST R 7.0.5-2008 (Numeric, RU/EN, custom) — Ivan Novoselov</title>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v3</id>
     <author>
       <name>Ivan Novoselov</name>
     </author>
@@ -18,11 +17,10 @@
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
 
-  <!-- ===== Locale terms ===== -->
   <locale>
     <terms>
-      <!-- en-dash -->
-      <term name="page-range-delimiter">–</term>
+      <term name="page-range-delimiter">-</term>
+      <term name="issue" form="symbol">№</term>
     </terms>
   </locale>
 
@@ -40,9 +38,7 @@
     </terms>
   </locale>
 
-  <!-- ===== Helpers: language check (ru vs non-ru) ===== -->
   <macro name="is-ru">
-    <!-- Returns "1" for ru/ru-RU, else empty -->
     <choose>
       <if variable="language" match="any" value="ru">
         <text value="1"/>
@@ -53,14 +49,12 @@
     </choose>
   </macro>
 
-  <!-- ===== Date ===== -->
   <macro name="year">
     <date variable="issued">
       <date-part name="year"/>
     </date>
   </macro>
 
-  <!-- ===== DOI ===== -->
   <macro name="doi">
     <choose>
       <if variable="DOI">
@@ -69,32 +63,9 @@
     </choose>
   </macro>
 
-  <!-- ===== URL + accessed ===== -->
-  <macro name="url-access-ru">
-    <choose>
-      <if variable="URL">
-        <text variable="URL" prefix="Режим доступа: "/>
-        <choose>
-          <if variable="accessed">
-            <group prefix=" (" suffix=")">
-              <text term="accessed" suffix=": "/>
-              <date variable="accessed">
-                <date-part name="day" form="numeric-leading-zeros" suffix="."/>
-                <date-part name="month" form="numeric-leading-zeros" suffix="."/>
-                <date-part name="year"/>
-              </date>
-            </group>
-          </if>
-        </choose>
-      </if>
-    </choose>
-  </macro>
-
-  <!-- ===== Authors: first author (Surname, I.O.) for entry start ===== -->
   <macro name="first-author-surname-initials">
     <names variable="author">
-      <name form="long"
-            name-as-sort-order="first"
+      <name name-as-sort-order="first"
             sort-separator=", "
             initialize-with="."
             delimiter=", "
@@ -105,11 +76,10 @@
     </names>
   </macro>
 
-  <!-- ===== Authors after "/" : I.O. Surname, ... ; 1–4 all, 5+ first 3 + [et al.] ===== -->
   <macro name="authors-after-slash">
     <names variable="author">
-      <name form="long"
-            name-as-sort-order="none"
+      <name name-as-sort-order="none"
+            sort-separator=" "
             initialize-with="."
             delimiter=", "
             delimiter-precedes-last="always"
@@ -122,108 +92,84 @@
     </names>
   </macro>
 
-  <!-- ===== Title ===== -->
-  <macro name="title">
-    <text variable="title"/>
-  </macro>
-
-  <!-- ===== Journal container ===== -->
-  <macro name="container-title">
-    <text variable="container-title"/>
-  </macro>
-
-  <!-- ===== Volume label RU/EN ===== -->
-  <macro name="vol-labeled">
-    <choose>
-      <if variable="volume">
-        <choose>
-          <if variable="language" match="any" value="ru">
-            <text value="Т. " />
-            <text variable="volume"/>
-          </if>
-          <else-if variable="language" match="any" value="ru-RU">
-            <text value="Т. " />
-            <text variable="volume"/>
-          </else-if>
-          <else>
-            <text value="Vol. " />
-            <text variable="volume"/>
-          </else>
-        </choose>
-      </if>
-    </choose>
-  </macro>
-
-  <!-- ===== Issue label RU/EN ===== -->
-  <macro name="issue-labeled">
-    <choose>
-      <if variable="issue">
-        <choose>
-          <if variable="language" match="any" value="ru">
-            <text value="№ " />
-            <text variable="issue"/>
-          </if>
-          <else-if variable="language" match="any" value="ru-RU">
-            <text value="№ " />
-            <text variable="issue"/>
-          </else-if>
-          <else>
-            <text value="No. " />
-            <text variable="issue"/>
-          </else>
-        </choose>
-      </if>
-    </choose>
-  </macro>
-
-  <!-- ===== Pages label RU/EN (page range or eLocator) ===== -->
   <macro name="pages-labeled">
     <choose>
       <if variable="page">
         <choose>
           <if variable="language" match="any" value="ru">
-            <text value="С. " />
-            <text variable="page"/>
+            <text value="С. "/>
           </if>
           <else-if variable="language" match="any" value="ru-RU">
-            <text value="С. " />
-            <text variable="page"/>
+            <text value="С. "/>
           </else-if>
           <else>
-            <text value="P. " />
-            <text variable="page"/>
+            <text value="P. "/>
           </else>
         </choose>
+        <text variable="page"/>
       </if>
-      <!-- fallback: some records store article-number in "number" -->
       <else-if variable="number">
         <choose>
           <if variable="language" match="any" value="ru">
-            <text value="С. " />
-            <text variable="number"/>
+            <text value="С. "/>
           </if>
           <else-if variable="language" match="any" value="ru-RU">
-            <text value="С. " />
-            <text variable="number"/>
+            <text value="С. "/>
           </else-if>
           <else>
-            <text value="P. " />
-            <text variable="number"/>
+            <text value="P. "/>
           </else>
         </choose>
+        <text variable="number"/>
       </else-if>
     </choose>
   </macro>
 
-  <!-- ===== Publisher for books/thesis ===== -->
-  <macro name="publisher">
+  <macro name="vol-labeled">
+    <choose>
+      <if variable="volume">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="Т. "/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="Т. "/>
+          </else-if>
+          <else>
+            <text value="Vol. "/>
+          </else>
+        </choose>
+        <text variable="volume"/>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="issue-labeled">
+    <choose>
+      <if variable="issue">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="№ "/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="№ "/>
+          </else-if>
+          <else>
+            <text value="No. "/>
+          </else>
+        </choose>
+        <text variable="issue"/>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="publisher-block">
     <group delimiter=" : ">
       <text variable="publisher-place"/>
       <text variable="publisher"/>
     </group>
   </macro>
 
-  <!-- total pages for books -->
   <macro name="total-pages">
     <choose>
       <if variable="number-of-pages">
@@ -243,17 +189,80 @@
     </choose>
   </macro>
 
-  <!-- ===== CITATION (numeric): [1] ; [1, с. 96] ===== -->
-  <citation collapse="citation-number">
+  <macro name="web-access">
+    <choose>
+      <if variable="URL">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text variable="URL" prefix="Режим доступа: "/>
+            <choose>
+              <if variable="accessed">
+                <group prefix=" (" suffix=")">
+                  <text term="accessed" suffix=": "/>
+                  <date variable="accessed">
+                    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="year"/>
+                  </date>
+                </group>
+              </if>
+            </choose>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text variable="URL" prefix="Режим доступа: "/>
+            <choose>
+              <if variable="accessed">
+                <group prefix=" (" suffix=")">
+                  <text term="accessed" suffix=": "/>
+                  <date variable="accessed">
+                    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="year"/>
+                  </date>
+                </group>
+              </if>
+            </choose>
+          </else-if>
+          <else>
+            <text variable="URL" prefix="URL: "/>
+            <choose>
+              <if variable="accessed">
+                <group prefix=" (" suffix=")">
+                  <text term="accessed" suffix=": "/>
+                  <date variable="accessed">
+                    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="year"/>
+                  </date>
+                </group>
+              </if>
+            </choose>
+          </else>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+
+  <citation collapse="none">
     <sort>
       <key variable="citation-number"/>
     </sort>
-    <layout prefix="[" suffix="]" delimiter="; ">
+    <layout prefix="[" suffix="]" delimiter=",">
       <text variable="citation-number"/>
       <choose>
         <if variable="locator">
           <group prefix=", " delimiter=" ">
-            <text value="с." suffix=" "/>
+            <choose>
+              <if variable="language" match="any" value="ru">
+                <text value="с."/>
+              </if>
+              <else-if variable="language" match="any" value="ru-RU">
+                <text value="с."/>
+              </else-if>
+              <else>
+                <text value="p."/>
+              </else>
+            </choose>
             <text variable="locator"/>
           </group>
         </if>
@@ -261,25 +270,19 @@
     </layout>
   </citation>
 
-  <!-- ===== BIBLIOGRAPHY ===== -->
-  <bibliography et-al-min="5" et-al-use-first="3" entry-spacing="0" second-field-align="flush">
-    <sort>
-      <key variable="citation-number"/>
-    </sort>
-
+  <bibliography entry-spacing="0" second-field-align="flush" et-al-min="5" et-al-use-first="3">
     <layout suffix=".">
       <text variable="citation-number" suffix=". "/>
 
       <choose>
 
-        <!-- JOURNAL ARTICLE -->
         <if type="article-journal" match="any">
           <group delimiter=". ">
             <group>
               <text macro="first-author-surname-initials" suffix=". "/>
-              <text macro="title"/>
+              <text variable="title"/>
               <text macro="authors-after-slash" prefix=" / "/>
-              <text macro="container-title" prefix=" // "/>
+              <text variable="container-title" prefix=" // "/>
             </group>
 
             <group delimiter=" – ">
@@ -293,19 +296,19 @@
           </group>
         </if>
 
-        <!-- CONFERENCE PAPER (published proceedings) -->
         <else-if type="paper-conference" match="any">
           <group delimiter=". ">
             <group>
               <text macro="first-author-surname-initials" suffix=". "/>
-              <text macro="title"/>
+              <text variable="title"/>
               <text macro="authors-after-slash" prefix=" / "/>
-              <text macro="container-title" prefix=" // "/>
+              <text variable="container-title" prefix=" // "/>
             </group>
 
             <group delimiter=" – ">
               <text macro="year"/>
               <text macro="vol-labeled"/>
+              <text macro="issue-labeled"/>
               <text macro="pages-labeled"/>
             </group>
 
@@ -313,26 +316,24 @@
           </group>
         </else-if>
 
-        <!-- BOOK -->
         <else-if type="book" match="any">
           <group delimiter=" – ">
             <group>
               <text macro="first-author-surname-initials" suffix=". "/>
-              <text macro="title"/>
+              <text variable="title"/>
               <text macro="authors-after-slash" prefix=" / "/>
             </group>
-            <text macro="publisher"/>
+            <text macro="publisher-block"/>
             <text macro="year"/>
             <text macro="total-pages"/>
           </group>
         </else-if>
 
-        <!-- THESIS -->
         <else-if type="thesis" match="any">
           <group delimiter=" – ">
             <group>
               <text macro="first-author-surname-initials" suffix=". "/>
-              <text macro="title"/>
+              <text variable="title"/>
               <text macro="authors-after-slash" prefix=" / "/>
               <text variable="genre"/>
             </group>
@@ -341,22 +342,20 @@
           </group>
         </else-if>
 
-        <!-- WEBPAGE -->
         <else-if type="webpage" match="any">
           <group delimiter=". ">
-            <text macro="title"/>
+            <text variable="title"/>
             <text macro="authors-after-slash" prefix=" / "/>
-            <text macro="url-access-ru"/>
+            <text macro="web-access"/>
           </group>
         </else-if>
 
-        <!-- FALLBACK -->
         <else>
           <group delimiter=". ">
             <text macro="first-author-surname-initials" suffix=". "/>
-            <text macro="title"/>
+            <text variable="title"/>
             <text macro="authors-after-slash" prefix=" / "/>
-            <text macro="container-title"/>
+            <text variable="container-title"/>
             <text macro="year"/>
           </group>
         </else>
