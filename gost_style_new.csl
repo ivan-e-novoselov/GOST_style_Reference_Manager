@@ -7,67 +7,60 @@
        page-range-format="expanded">
 
   <info>
-    <title>GOST R 7.0.5-2008 (Numeric) for Mendeley Cite — Ivan Novoselov (custom)</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom</id>
-
+    <title>GOST R 7.0.5-2008 (Numeric, RU/EN labels, et al logic) — Ivan Novoselov (custom)</title>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v2</id>
     <author>
       <name>Ivan Novoselov</name>
     </author>
-
     <category citation-format="numeric"/>
     <category field="generic-base"/>
-
     <updated>2024-08-04T00:00:00+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
 
-  <!-- ===================== ОБЩИЕ ТЕРМИНЫ ===================== -->
+  <!-- ===== Locale terms ===== -->
   <locale>
     <terms>
-      <term name="issue" form="symbol">№</term>
-      <!-- en-dash for page ranges -->
+      <!-- en-dash -->
       <term name="page-range-delimiter">–</term>
     </terms>
   </locale>
 
-  <!-- RU -->
   <locale xml:lang="ru">
     <terms>
-      <term name="online">электронный ресурс</term>
-      <term name="accessed">дата обращения</term>
       <term name="et-al">и др.</term>
+      <term name="accessed">дата обращения</term>
     </terms>
   </locale>
 
-  <!-- EN -->
   <locale xml:lang="en">
     <terms>
-      <term name="online">electronic resource</term>
-      <term name="accessed">accessed</term>
       <term name="et-al">et al.</term>
+      <term name="accessed">date accessed</term>
     </terms>
   </locale>
 
-  <!-- ===================== МАКРОСЫ ===================== -->
+  <!-- ===== Helpers: language check (ru vs non-ru) ===== -->
+  <macro name="is-ru">
+    <!-- Returns "1" for ru/ru-RU, else empty -->
+    <choose>
+      <if variable="language" match="any" value="ru">
+        <text value="1"/>
+      </if>
+      <else-if variable="language" match="any" value="ru-RU">
+        <text value="1"/>
+      </else-if>
+    </choose>
+  </macro>
 
+  <!-- ===== Date ===== -->
   <macro name="year">
     <date variable="issued">
       <date-part name="year"/>
     </date>
   </macro>
 
-  <!-- Not used everywhere, but kept for newspapers etc. -->
-  <macro name="day-month">
-    <date variable="issued">
-      <date-part name="day" form="numeric" suffix=" "/>
-      <date-part name="month" form="long"/>
-    </date>
-  </macro>
-
-  <macro name="citation-number">
-    <text variable="citation-number" suffix=". "/>
-  </macro>
-
+  <!-- ===== DOI ===== -->
   <macro name="doi">
     <choose>
       <if variable="DOI">
@@ -76,8 +69,8 @@
     </choose>
   </macro>
 
-  <!-- URL + accessed date (RU/EN term "accessed" will localize by locale) -->
-  <macro name="url-access">
+  <!-- ===== URL + accessed ===== -->
+  <macro name="url-access-ru">
     <choose>
       <if variable="URL">
         <text variable="URL" prefix="Режим доступа: "/>
@@ -97,130 +90,160 @@
     </choose>
   </macro>
 
-  <!-- AUTHORS: 1–3 all, 4+ first + et-al (localized by locale) -->
-  <macro name="authors-only">
+  <!-- ===== Authors: first author (Surname, I.O.) for entry start ===== -->
+  <macro name="first-author-surname-initials">
     <names variable="author">
-      <name et-al-min="4" et-al-use-first="1"
-            delimiter=", "
+      <name form="long"
+            name-as-sort-order="first"
+            sort-separator=", "
             initialize-with="."
-            name-as-sort-order="all"
-            sort-separator=" "/>
-      <et-al term="et-al"/>
+            delimiter=", "
+            delimiter-precedes-last="always"/>
       <substitute>
         <text variable="title"/>
       </substitute>
     </names>
   </macro>
 
-  <!-- Editors/translators/etc.: keep cite-safe (no <label> inside <names>) -->
-  <macro name="names-responsibility">
-    <names variable="collection-editor editor translator" delimiter="; ">
-      <name et-al-min="4" et-al-use-first="1"
-            delimiter=", "
+  <!-- ===== Authors after "/" : I.O. Surname, ... ; 1–4 all, 5+ first 3 + [et al.] ===== -->
+  <macro name="authors-after-slash">
+    <names variable="author">
+      <name form="long"
+            name-as-sort-order="none"
             initialize-with="."
-            name-as-sort-order="all"
-            sort-separator=" "/>
-      <et-al term="et-al"/>
+            delimiter=", "
+            delimiter-precedes-last="always"
+            et-al-min="5"
+            et-al-use-first="3"/>
+      <et-al prefix=" [" suffix="]" term="et-al"/>
+      <substitute>
+        <text variable="title"/>
+      </substitute>
     </names>
   </macro>
 
+  <!-- ===== Title ===== -->
   <macro name="title">
     <text variable="title"/>
   </macro>
 
-  <macro name="title-with-medium">
-    <choose>
-      <if variable="medium">
-        <text macro="title" suffix=" [Электронный ресурс]"/>
-      </if>
-      <else>
-        <text macro="title"/>
-      </else>
-    </choose>
+  <!-- ===== Journal container ===== -->
+  <macro name="container-title">
+    <text variable="container-title"/>
   </macro>
 
-  <!-- " М. : Издатель, 2008." -->
-  <macro name="publisher">
-    <group prefix=" " delimiter=" : " suffix=", ">
-      <text variable="publisher-place"/>
-      <text variable="publisher"/>
-    </group>
-    <text macro="year" suffix="."/>
-  </macro>
-
-  <macro name="volume">
+  <!-- ===== Volume label RU/EN ===== -->
+  <macro name="vol-labeled">
     <choose>
       <if variable="volume">
-        <label variable="volume" form="short" suffix=" " text-case="capitalize-first"/>
-        <text variable="volume"/>
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="Т. " />
+            <text variable="volume"/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="Т. " />
+            <text variable="volume"/>
+          </else-if>
+          <else>
+            <text value="Vol. " />
+            <text variable="volume"/>
+          </else>
+        </choose>
       </if>
     </choose>
   </macro>
 
-  <macro name="collection-number">
+  <!-- ===== Issue label RU/EN ===== -->
+  <macro name="issue-labeled">
     <choose>
-      <if variable="collection-number">
-        <label variable="collection-number" form="short" suffix=" " text-case="capitalize-first"/>
-        <text variable="collection-number"/>
+      <if variable="issue">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="№ " />
+            <text variable="issue"/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="№ " />
+            <text variable="issue"/>
+          </else-if>
+          <else>
+            <text value="No. " />
+            <text variable="issue"/>
+          </else>
+        </choose>
       </if>
     </choose>
   </macro>
 
-  <macro name="number-of-volumes">
-    <choose>
-      <if variable="number-of-volumes">
-        <text variable="number-of-volumes" prefix="в "/>
-        <label variable="number-of-volumes" form="short" prefix=" "/>
-      </if>
-    </choose>
-  </macro>
-
-  <!-- PAGES: RU -> "С. ", EN/other (language filled) -> "P. " -->
-  <macro name="pages">
+  <!-- ===== Pages label RU/EN (page range or eLocator) ===== -->
+  <macro name="pages-labeled">
     <choose>
       <if variable="page">
         <choose>
-          <if variable="language">
-            <text value="P. "/>
+          <if variable="language" match="any" value="ru">
+            <text value="С. " />
+            <text variable="page"/>
           </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="С. " />
+            <text variable="page"/>
+          </else-if>
           <else>
-            <text value="С. "/>
+            <text value="P. " />
+            <text variable="page"/>
           </else>
         </choose>
-        <text variable="page"/>
       </if>
+      <!-- fallback: some records store article-number in "number" -->
+      <else-if variable="number">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="С. " />
+            <text variable="number"/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="С. " />
+            <text variable="number"/>
+          </else-if>
+          <else>
+            <text value="P. " />
+            <text variable="number"/>
+          </else>
+        </choose>
+      </else-if>
     </choose>
   </macro>
 
-  <macro name="number-of-pages">
+  <!-- ===== Publisher for books/thesis ===== -->
+  <macro name="publisher">
+    <group delimiter=" : ">
+      <text variable="publisher-place"/>
+      <text variable="publisher"/>
+    </group>
+  </macro>
+
+  <!-- total pages for books -->
+  <macro name="total-pages">
     <choose>
       <if variable="number-of-pages">
         <text variable="number-of-pages"/>
         <choose>
-          <if variable="language">
-            <text value=" p."/>
-          </if>
-          <else>
+          <if variable="language" match="any" value="ru">
             <text value=" с."/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value=" с."/>
+          </else-if>
+          <else>
+            <text value=" p."/>
           </else>
         </choose>
       </if>
     </choose>
   </macro>
 
-  <macro name="pages-or-volumes">
-    <choose>
-      <if variable="number-of-volumes">
-        <text macro="number-of-volumes"/>
-      </if>
-      <else>
-        <text macro="number-of-pages"/>
-      </else>
-    </choose>
-  </macro>
-
-  <!-- ===================== CITATION (NUMERIC) ===================== -->
-  <!-- [1] ; [1, с. 96] -->
+  <!-- ===== CITATION (numeric): [1] ; [1, с. 96] ===== -->
   <citation collapse="citation-number">
     <sort>
       <key variable="citation-number"/>
@@ -230,7 +253,6 @@
       <choose>
         <if variable="locator">
           <group prefix=", " delimiter=" ">
-            <!-- Force RU "с." for locator (as requested) -->
             <text value="с." suffix=" "/>
             <text variable="locator"/>
           </group>
@@ -239,262 +261,107 @@
     </layout>
   </citation>
 
-  <!-- ===================== BIBLIOGRAPHY ===================== -->
-
-  <macro name="bib-entry">
-    <text macro="citation-number"/>
-
-    <choose>
-
-      <!-- BOOK -->
-      <if type="book">
-        <group delimiter=".">
-          <group delimiter=". — ">
-            <group delimiter=" / ">
-              <group delimiter=". ">
-                <group delimiter=" ">
-                  <text macro="authors-only"/>
-                  <text macro="title-with-medium"/>
-                  <text variable="collection-title"/>
-                  <text macro="number-of-volumes"/>
-                </group>
-                <text macro="volume"/>
-                <text variable="title-short"/>
-              </group>
-              <text macro="names-responsibility"/>
-            </group>
-
-            <text variable="edition"/>
-            <text macro="publisher"/>
-            <text macro="collection-number"/>
-            <text macro="pages-or-volumes"/>
-            <text variable="medium"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </if>
-
-      <!-- THESIS -->
-      <else-if type="thesis">
-        <group delimiter=". — ">
-          <group delimiter=" / ">
-            <group delimiter=" ">
-              <text macro="authors-only"/>
-              <text macro="title-with-medium"/>
-              <text variable="genre"/>
-            </group>
-          </group>
-          <text macro="publisher"/>
-          <text macro="number-of-pages"/>
-        </group>
-      </else-if>
-
-      <!-- CHAPTER -->
-      <else-if type="chapter">
-        <group delimiter=".">
-          <group delimiter=". — ">
-            <group delimiter=" // ">
-              <group delimiter=" ">
-                <text macro="authors-only"/>
-                <text macro="title-with-medium"/>
-              </group>
-
-              <group delimiter=" / ">
-                <group delimiter=" : ">
-                  <group delimiter=" ">
-                    <text variable="container-title"/>
-                    <text variable="event"/>
-                  </group>
-                  <text variable="collection-title"/>
-                  <text macro="number-of-volumes"/>
-                </group>
-
-                <group delimiter=" ">
-                  <text macro="names-responsibility"/>
-                  <text variable="note"/>
-                </group>
-              </group>
-            </group>
-
-            <text macro="publisher"/>
-            <text macro="volume"/>
-            <text macro="collection-number"/>
-            <text variable="title-short"/>
-            <text macro="pages"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </else-if>
-
-      <!-- CONFERENCE PAPER -->
-      <else-if type="paper-conference">
-        <group delimiter=".">
-          <group delimiter=". — ">
-            <group delimiter=" // ">
-              <group delimiter=" ">
-                <text macro="authors-only"/>
-                <text macro="title-with-medium"/>
-              </group>
-
-              <group delimiter=" / ">
-                <group delimiter=" : ">
-                  <group delimiter=" ">
-                    <text variable="container-title"/>
-                    <text variable="event"/>
-                  </group>
-                  <text variable="collection-title"/>
-                  <text macro="number-of-volumes"/>
-                </group>
-
-                <group delimiter=" ">
-                  <text macro="names-responsibility"/>
-                  <text variable="note"/>
-                </group>
-              </group>
-            </group>
-
-            <text macro="publisher"/>
-            <text macro="volume"/>
-            <text macro="collection-number"/>
-            <text variable="title-short"/>
-            <text macro="pages"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </else-if>
-
-      <!-- JOURNAL ARTICLE -->
-      <else-if type="article-journal">
-        <group delimiter=".">
-          <group delimiter=". — ">
-            <group delimiter=" // ">
-              <group delimiter=" ">
-                <text macro="authors-only"/>
-                <text macro="title-with-medium"/>
-                <text variable="collection-title"/>
-              </group>
-              <text variable="container-title"/>
-            </group>
-
-            <text macro="year"/>
-            <text macro="volume"/>
-            <text variable="title-short"/>
-            <text variable="issue" prefix="№ "/>
-            <text macro="pages"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </else-if>
-
-      <!-- ARTICLE (fallback) -->
-      <else-if type="article">
-        <group delimiter=".">
-          <group delimiter=". — ">
-            <group delimiter=" // ">
-              <group delimiter=" ">
-                <text macro="authors-only"/>
-                <text macro="title-with-medium"/>
-                <text variable="collection-title"/>
-              </group>
-              <text variable="container-title"/>
-            </group>
-
-            <text macro="year"/>
-            <text macro="volume"/>
-            <text variable="title-short"/>
-            <text variable="issue" prefix="№ "/>
-            <text macro="pages"/>
-          </group>
-
-          <group prefix=" " delimiter=" ">
-            <text macro="doi"/>
-          </group>
-        </group>
-      </else-if>
-
-      <!-- NEWSPAPER ARTICLE -->
-      <else-if type="article-newspaper">
-        <group delimiter=". — ">
-          <group delimiter=" // ">
-            <group delimiter=" ">
-              <text macro="authors-only"/>
-              <text macro="title-with-medium"/>
-            </group>
-            <text variable="container-title"/>
-          </group>
-
-          <text macro="year"/>
-          <text macro="day-month"/>
-          <text macro="pages"/>
-        </group>
-      </else-if>
-
-      <!-- WEBPAGE -->
-      <else-if type="webpage">
-        <group delimiter=". — ">
-          <group delimiter=" / ">
-            <group delimiter=" : ">
-              <text macro="title" suffix=" [Электронный ресурс]"/>
-              <text variable="genre"/>
-            </group>
-            <group delimiter=" ">
-              <text macro="authors-only"/>
-              <text variable="note"/>
-            </group>
-          </group>
-          <text macro="url-access"/>
-        </group>
-      </else-if>
-
-      <!-- OTHER -->
-      <else>
-        <group delimiter=". — ">
-          <group delimiter=" / ">
-            <group delimiter=". ">
-              <group delimiter=" : ">
-                <text macro="title-with-medium"/>
-                <text variable="collection-title"/>
-                <text macro="number-of-volumes"/>
-              </group>
-              <text macro="volume"/>
-              <text variable="title-short"/>
-            </group>
-
-            <group delimiter=" ">
-              <text macro="names-responsibility"/>
-              <text variable="note"/>
-            </group>
-          </group>
-
-          <text macro="publisher"/>
-          <text macro="collection-number"/>
-          <text macro="pages-or-volumes"/>
-        </group>
-      </else>
-
-    </choose>
-  </macro>
-
-  <!-- numeric bibliography order == order of appearance -->
-  <bibliography et-al-min="4" et-al-use-first="1" entry-spacing="0" second-field-align="flush">
+  <!-- ===== BIBLIOGRAPHY ===== -->
+  <bibliography et-al-min="5" et-al-use-first="3" entry-spacing="0" second-field-align="flush">
     <sort>
       <key variable="citation-number"/>
     </sort>
 
     <layout suffix=".">
-      <text macro="bib-entry"/>
+      <text variable="citation-number" suffix=". "/>
+
+      <choose>
+
+        <!-- JOURNAL ARTICLE -->
+        <if type="article-journal" match="any">
+          <group delimiter=". ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text macro="container-title" prefix=" // "/>
+            </group>
+
+            <group delimiter=" – ">
+              <text macro="year"/>
+              <text macro="vol-labeled"/>
+              <text macro="issue-labeled"/>
+              <text macro="pages-labeled"/>
+            </group>
+
+            <text macro="doi"/>
+          </group>
+        </if>
+
+        <!-- CONFERENCE PAPER (published proceedings) -->
+        <else-if type="paper-conference" match="any">
+          <group delimiter=". ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text macro="container-title" prefix=" // "/>
+            </group>
+
+            <group delimiter=" – ">
+              <text macro="year"/>
+              <text macro="vol-labeled"/>
+              <text macro="pages-labeled"/>
+            </group>
+
+            <text macro="doi"/>
+          </group>
+        </else-if>
+
+        <!-- BOOK -->
+        <else-if type="book" match="any">
+          <group delimiter=" – ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+            </group>
+            <text macro="publisher"/>
+            <text macro="year"/>
+            <text macro="total-pages"/>
+          </group>
+        </else-if>
+
+        <!-- THESIS -->
+        <else-if type="thesis" match="any">
+          <group delimiter=" – ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text variable="genre"/>
+            </group>
+            <text variable="publisher-place"/>
+            <text macro="year"/>
+          </group>
+        </else-if>
+
+        <!-- WEBPAGE -->
+        <else-if type="webpage" match="any">
+          <group delimiter=". ">
+            <text macro="title"/>
+            <text macro="authors-after-slash" prefix=" / "/>
+            <text macro="url-access-ru"/>
+          </group>
+        </else-if>
+
+        <!-- FALLBACK -->
+        <else>
+          <group delimiter=". ">
+            <text macro="first-author-surname-initials" suffix=". "/>
+            <text macro="title"/>
+            <text macro="authors-after-slash" prefix=" / "/>
+            <text macro="container-title"/>
+            <text macro="year"/>
+          </group>
+        </else>
+
+      </choose>
     </layout>
   </bibliography>
 
