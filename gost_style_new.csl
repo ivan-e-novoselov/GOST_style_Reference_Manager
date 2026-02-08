@@ -159,13 +159,14 @@
 
   <!-- КЛЮЧ: всегда "С.", никогда "Сс." -->
   <macro name="pages">
-    <choose>
-      <if variable="page">
-        <label variable="page" form="short" plural="never" suffix=" "/>
-        <text variable="page"/>
-      </if>
-    </choose>
-  </macro>
+  <choose>
+    <if variable="page">
+      <text value="С. "/>
+      <text variable="page"/>
+    </if>
+  </choose>
+</macro>
+
 
   <macro name="number-of-pages">
     <choose>
@@ -457,3 +458,4 @@
   </bibliography>
 
 </style>
+
