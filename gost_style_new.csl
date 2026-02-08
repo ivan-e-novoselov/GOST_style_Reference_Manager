@@ -7,22 +7,25 @@
        page-range-format="expanded">
 
   <info>
-    <title>GOST R 7.0.5-2008 (Numeric) for Mendeley Cite — Ivan Novoselov</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov</id>
+    <title>GOST R 7.0.5-2008 (Numeric) for Mendeley Cite — Ivan Novoselov (custom)</title>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom</id>
+
     <author>
       <name>Ivan Novoselov</name>
     </author>
+
     <category citation-format="numeric"/>
     <category field="generic-base"/>
+
     <updated>2024-08-04T00:00:00+00:00</updated>
-    <rights>CC BY-SA 3.0</rights>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
 
-  <!-- ОБЩИЕ ТЕРМИНЫ -->
+  <!-- ===================== ОБЩИЕ ТЕРМИНЫ ===================== -->
   <locale>
     <terms>
       <term name="issue" form="symbol">№</term>
-      <!-- диапазоны страниц: среднее тире (en-dash) -->
+      <!-- en-dash for page ranges -->
       <term name="page-range-delimiter">–</term>
     </terms>
   </locale>
@@ -53,6 +56,7 @@
     </date>
   </macro>
 
+  <!-- Not used everywhere, but kept for newspapers etc. -->
   <macro name="day-month">
     <date variable="issued">
       <date-part name="day" form="numeric" suffix=" "/>
@@ -72,15 +76,28 @@
     </choose>
   </macro>
 
+  <!-- URL + accessed date (RU/EN term "accessed" will localize by locale) -->
   <macro name="url-access">
     <choose>
       <if variable="URL">
         <text variable="URL" prefix="Режим доступа: "/>
+        <choose>
+          <if variable="accessed">
+            <group prefix=" (" suffix=")">
+              <text term="accessed" suffix=": "/>
+              <date variable="accessed">
+                <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                <date-part name="year"/>
+              </date>
+            </group>
+          </if>
+        </choose>
       </if>
     </choose>
   </macro>
 
-  <!-- АВТОРЫ: 1–3 все; 4+ первый + et-al -->
+  <!-- AUTHORS: 1–3 all, 4+ first + et-al (localized by locale) -->
   <macro name="authors-only">
     <names variable="author">
       <name et-al-min="4" et-al-use-first="1"
@@ -95,7 +112,7 @@
     </names>
   </macro>
 
-  <!-- для редакторов/переводчиков (сокращаем так же, чтобы не раздувало) -->
+  <!-- Editors/translators/etc.: keep cite-safe (no <label> inside <names>) -->
   <macro name="names-responsibility">
     <names variable="collection-editor editor translator" delimiter="; ">
       <name et-al-min="4" et-al-use-first="1"
@@ -122,6 +139,7 @@
     </choose>
   </macro>
 
+  <!-- " М. : Издатель, 2008." -->
   <macro name="publisher">
     <group prefix=" " delimiter=" : " suffix=", ">
       <text variable="publisher-place"/>
@@ -157,22 +175,35 @@
     </choose>
   </macro>
 
-  <!-- КЛЮЧ: всегда "С.", никогда "Сс." -->
+  <!-- PAGES: RU -> "С. ", EN/other (language filled) -> "P. " -->
   <macro name="pages">
-  <choose>
-    <if variable="page">
-      <text value="С. "/>
-      <text variable="page"/>
-    </if>
-  </choose>
-</macro>
-
+    <choose>
+      <if variable="page">
+        <choose>
+          <if variable="language">
+            <text value="P. "/>
+          </if>
+          <else>
+            <text value="С. "/>
+          </else>
+        </choose>
+        <text variable="page"/>
+      </if>
+    </choose>
+  </macro>
 
   <macro name="number-of-pages">
     <choose>
       <if variable="number-of-pages">
         <text variable="number-of-pages"/>
-        <label variable="number-of-pages" form="short" plural="never" prefix=" "/>
+        <choose>
+          <if variable="language">
+            <text value=" p."/>
+          </if>
+          <else>
+            <text value=" с."/>
+          </else>
+        </choose>
       </if>
     </choose>
   </macro>
@@ -199,7 +230,8 @@
       <choose>
         <if variable="locator">
           <group prefix=", " delimiter=" ">
-            <label variable="locator" form="short" plural="never"/>
+            <!-- Force RU "с." for locator (as requested) -->
+            <text value="с." suffix=" "/>
             <text variable="locator"/>
           </group>
         </if>
@@ -214,6 +246,7 @@
 
     <choose>
 
+      <!-- BOOK -->
       <if type="book">
         <group delimiter=".">
           <group delimiter=". — ">
@@ -244,6 +277,7 @@
         </group>
       </if>
 
+      <!-- THESIS -->
       <else-if type="thesis">
         <group delimiter=". — ">
           <group delimiter=" / ">
@@ -258,6 +292,7 @@
         </group>
       </else-if>
 
+      <!-- CHAPTER -->
       <else-if type="chapter">
         <group delimiter=".">
           <group delimiter=". — ">
@@ -297,6 +332,7 @@
         </group>
       </else-if>
 
+      <!-- CONFERENCE PAPER -->
       <else-if type="paper-conference">
         <group delimiter=".">
           <group delimiter=". — ">
@@ -336,6 +372,7 @@
         </group>
       </else-if>
 
+      <!-- JOURNAL ARTICLE -->
       <else-if type="article-journal">
         <group delimiter=".">
           <group delimiter=". — ">
@@ -361,6 +398,7 @@
         </group>
       </else-if>
 
+      <!-- ARTICLE (fallback) -->
       <else-if type="article">
         <group delimiter=".">
           <group delimiter=". — ">
@@ -386,6 +424,7 @@
         </group>
       </else-if>
 
+      <!-- NEWSPAPER ARTICLE -->
       <else-if type="article-newspaper">
         <group delimiter=". — ">
           <group delimiter=" // ">
@@ -402,6 +441,7 @@
         </group>
       </else-if>
 
+      <!-- WEBPAGE -->
       <else-if type="webpage">
         <group delimiter=". — ">
           <group delimiter=" / ">
@@ -418,6 +458,7 @@
         </group>
       </else-if>
 
+      <!-- OTHER -->
       <else>
         <group delimiter=". — ">
           <group delimiter=" / ">
@@ -446,7 +487,7 @@
     </choose>
   </macro>
 
-  <!-- Важно: et-al здесь тоже 4/1, иначе опять "всех" на иностранных начнёт лить -->
+  <!-- numeric bibliography order == order of appearance -->
   <bibliography et-al-min="4" et-al-use-first="1" entry-spacing="0" second-field-align="flush">
     <sort>
       <key variable="citation-number"/>
@@ -458,4 +499,3 @@
   </bibliography>
 
 </style>
-
