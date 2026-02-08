@@ -153,13 +153,13 @@
   </macro>
 
   <macro name="pages">
-    <choose>
-      <if variable="page">
-        <label variable="page" form="short" suffix=" " text-case="capitalize-first"/>
-        <text variable="page"/>
-      </if>
-    </choose>
-  </macro>
+  <choose>
+    <if variable="page">
+      <label variable="page" form="short" suffix=" " plural="never"/>
+      <text variable="page"/>
+    </if>
+  </choose>
+</macro>
 
   <macro name="number-of-pages">
     <choose>
@@ -460,3 +460,4 @@
   </bibliography>
 
 </style>
+
