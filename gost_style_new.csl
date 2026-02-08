@@ -5,34 +5,29 @@
        default-locale="ru-RU">
 
   <info>
-    <title>GOST R 7.0.5-2008 (Author-Date) for Mendeley Cite (Word) — Ivan Novoselov</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-author-date-ivan-novoselov</id>
+    <title>GOST (Numeric) for Mendeley Cite (Word) — Ivan Novoselov</title>
+    <id>http://www.zotero.org/styles/gost-numeric-ivan-novoselov</id>
 
     <author>
       <name>Ivan Novoselov</name>
     </author>
 
-    <category citation-format="author-date"/>
+    <category citation-format="numeric"/>
     <category field="generic-base"/>
 
-    <!-- Дата НЕ в будущем (Mendeley Cite иногда капризничает) -->
     <updated>2024-08-04T00:00:00+00:00</updated>
     <rights>CC BY-SA 3.0</rights>
   </info>
 
-  <!-- ===================== ВСПОМОГАТЕЛЬНЫЕ МАКРОСЫ ===================== -->
+  <!-- Аккуратно: Cite это переваривает (пример — MDPI). -->
+  <locale>
+    <terms>
+      <!-- ГОСТ обычно требует тире в диапазонах страниц -->
+      <term name="page-range-delimiter">—</term>
+    </terms>
+  </locale>
 
-  <macro name="language-sort">
-    <!-- пустое language считаем "русским" -->
-    <choose>
-      <if variable="language">
-        <text value="B000"/>
-      </if>
-      <else>
-        <text value="A000"/>
-      </else>
-    </choose>
-  </macro>
+  <!-- ===================== ВСПОМОГАТЕЛЬНЫЕ МАКРОСЫ ===================== -->
 
   <macro name="year">
     <date variable="issued">
@@ -43,11 +38,10 @@
   <macro name="day-month">
     <date variable="issued">
       <date-part name="day" form="numeric" suffix=" "/>
-      <date-part name="month" form="short"/>
+      <date-part name="month" form="long"/>
     </date>
   </macro>
 
-  <!-- Cite-safe: без табов/контрольных символов -->
   <macro name="citation-number">
     <text variable="citation-number" suffix=". "/>
   </macro>
@@ -68,43 +62,6 @@
     </choose>
   </macro>
 
-  <macro name="author-short">
-    <!-- для [Иванов, 2013] -->
-    <names variable="author">
-      <name form="short"
-            name-as-sort-order="all"
-            sort-separator=" "
-            delimiter=", "
-            delimiter-precedes-last="always"/>
-      <substitute>
-        <text variable="title"/>
-        <text variable="container-title"/>
-      </substitute>
-    </names>
-  </macro>
-
-  <macro name="author-sort">
-    <names variable="author">
-      <name name-as-sort-order="all"
-            sort-separator=" "
-            initialize-with="."
-            delimiter=", "
-            delimiter-precedes-last="always"/>
-    </names>
-  </macro>
-
-  <!-- ВАЖНО: Cite-safe. НЕЛЬЗЯ <label> без variable внутри <names>.
-       Поэтому печатаем только имена (без "ред./пер./сост.") -->
-  <macro name="names-responsibility">
-    <names variable="collection-editor editor translator" delimiter="; ">
-      <name et-al-min="20" et-al-use-first="1"
-            delimiter=", "
-            initialize-with="."
-            name-as-sort-order="all"
-            sort-separator=" "/>
-    </names>
-  </macro>
-
   <macro name="authors-only">
     <names variable="author">
       <name et-al-min="20" et-al-use-first="1"
@@ -115,6 +72,17 @@
       <substitute>
         <text variable="title"/>
       </substitute>
+    </names>
+  </macro>
+
+  <!-- Cite-safe: без label внутри names с несколькими ролями -->
+  <macro name="names-responsibility">
+    <names variable="collection-editor editor translator" delimiter="; ">
+      <name et-al-min="20" et-al-use-first="1"
+            delimiter=", "
+            initialize-with="."
+            name-as-sort-order="all"
+            sort-separator=" "/>
     </names>
   </macro>
 
@@ -133,8 +101,9 @@
     </choose>
   </macro>
 
+  <!-- ГОСТ: М. : Флинта, 2008. -->
   <macro name="publisher">
-    <group prefix=" " delimiter=": " suffix=", ">
+    <group prefix=" " delimiter=" : " suffix=", ">
       <text variable="publisher-place"/>
       <text variable="publisher"/>
     </group>
@@ -162,16 +131,8 @@
   <macro name="number-of-volumes">
     <choose>
       <if variable="number-of-volumes">
-        <choose>
-          <if variable="language">
-            <text variable="number-of-volumes" prefix="in "/>
-            <label variable="number-of-volumes" form="short" prefix=" "/>
-          </if>
-          <else>
-            <text variable="number-of-volumes" prefix="в "/>
-            <label variable="number-of-volumes" form="short" prefix=" "/>
-          </else>
-        </choose>
+        <text variable="number-of-volumes" prefix="в "/>
+        <label variable="number-of-volumes" form="short" prefix=" "/>
       </if>
     </choose>
   </macro>
@@ -205,26 +166,20 @@
     </choose>
   </macro>
 
-  <!-- ===================== ССЫЛКИ В ТЕКСТЕ (AUTHOR-DATE) ===================== -->
+  <!-- ===================== ССЫЛКИ В ТЕКСТЕ (NUMERIC) ===================== -->
+  <!-- Нужно: [10] и [10, с. 96] -->
 
-  <citation et-al-min="4"
-            et-al-use-first="1"
-            disambiguate-add-year-suffix="true">
+  <citation collapse="citation-number">
     <sort>
-      <key macro="language-sort"/>
-      <key macro="author-short"/>
-      <key variable="issued"/>
+      <key variable="citation-number"/>
     </sort>
 
     <layout prefix="[" suffix="]" delimiter="; ">
-      <group delimiter=", ">
-        <text macro="author-short"/>
-        <text macro="year"/>
-      </group>
-
+      <text variable="citation-number"/>
       <choose>
         <if variable="locator">
           <group prefix=", " delimiter=" ">
+            <!-- В ru-RU Mendeley обычно даёт "с." -->
             <label variable="locator" form="short"/>
             <text variable="locator"/>
           </group>
@@ -236,7 +191,6 @@
   <!-- ===================== БИБЛИОГРАФИЯ ===================== -->
 
   <macro name="bib-entry">
-    <!-- Если нумерация не нужна — удали следующую строку -->
     <text macro="citation-number"/>
 
     <choose>
@@ -244,7 +198,7 @@
       <!-- КНИГА -->
       <if type="book">
         <group delimiter=".">
-          <group delimiter=". – ">
+          <group delimiter=". — ">
             <group delimiter=" / ">
               <group delimiter=". ">
                 <group delimiter=" ">
@@ -274,7 +228,7 @@
 
       <!-- ДИССЕРТАЦИЯ -->
       <else-if type="thesis">
-        <group delimiter=". – ">
+        <group delimiter=". — ">
           <group delimiter=" / ">
             <group delimiter=" ">
               <text macro="authors-only"/>
@@ -290,7 +244,7 @@
       <!-- РАЗДЕЛ КНИГИ -->
       <else-if type="chapter">
         <group delimiter=".">
-          <group delimiter=". – ">
+          <group delimiter=". — ">
             <group delimiter=" // ">
               <group delimiter=" ">
                 <text macro="authors-only"/>
@@ -330,7 +284,7 @@
       <!-- ДОКЛАД КОНФЕРЕНЦИИ -->
       <else-if type="paper-conference">
         <group delimiter=".">
-          <group delimiter=". – ">
+          <group delimiter=". — ">
             <group delimiter=" // ">
               <group delimiter=" ">
                 <text macro="authors-only"/>
@@ -370,14 +324,12 @@
       <!-- СТАТЬЯ В ЖУРНАЛЕ -->
       <else-if type="article-journal">
         <group delimiter=".">
-          <group delimiter=". – ">
+          <group delimiter=". — ">
             <group delimiter=" // ">
-              <group delimiter=" / ">
-                <group delimiter=" ">
-                  <text macro="authors-only"/>
-                  <text macro="title-with-medium"/>
-                  <text variable="collection-title"/>
-                </group>
+              <group delimiter=" ">
+                <text macro="authors-only"/>
+                <text macro="title-with-medium"/>
+                <text variable="collection-title"/>
               </group>
               <text variable="container-title"/>
             </group>
@@ -398,14 +350,12 @@
       <!-- СТАТЬЯ (универсальная ветка) -->
       <else-if type="article">
         <group delimiter=".">
-          <group delimiter=". – ">
+          <group delimiter=". — ">
             <group delimiter=" // ">
-              <group delimiter=" / ">
-                <group delimiter=" ">
-                  <text macro="authors-only"/>
-                  <text macro="title-with-medium"/>
-                  <text variable="collection-title"/>
-                </group>
+              <group delimiter=" ">
+                <text macro="authors-only"/>
+                <text macro="title-with-medium"/>
+                <text variable="collection-title"/>
               </group>
               <text variable="container-title"/>
             </group>
@@ -425,19 +375,15 @@
 
       <!-- СТАТЬЯ В ГАЗЕТЕ -->
       <else-if type="article-newspaper">
-        <group delimiter=". – ">
+        <group delimiter=". — ">
           <group delimiter=" // ">
-            <group delimiter=" / ">
-              <group delimiter=" : ">
-                <text macro="title-with-medium"/>
-                <text variable="section"/>
-              </group>
+            <group delimiter=" ">
               <text macro="authors-only"/>
+              <text macro="title-with-medium"/>
             </group>
             <text variable="container-title"/>
           </group>
 
-          <text variable="title-short"/>
           <text macro="year"/>
           <text macro="day-month"/>
           <text macro="pages"/>
@@ -446,7 +392,7 @@
 
       <!-- ВЕБ-СТРАНИЦА -->
       <else-if type="webpage">
-        <group delimiter=". – ">
+        <group delimiter=". — ">
           <group delimiter=" / ">
             <group delimiter=" : ">
               <text macro="title" suffix=" [Электронный ресурс]"/>
@@ -463,7 +409,7 @@
 
       <!-- ПРОЧЕЕ -->
       <else>
-        <group delimiter=". – ">
+        <group delimiter=". — ">
           <group delimiter=" / ">
             <group delimiter=". ">
               <group delimiter=" : ">
@@ -490,12 +436,10 @@
     </choose>
   </macro>
 
+  <!-- Для numeric обычно сортируют по появлению (citation-number) -->
   <bibliography et-al-min="20" et-al-use-first="1">
     <sort>
-      <key macro="language-sort"/>
-      <key macro="author-sort"/>
-      <key variable="issued"/>
-      <key variable="title"/>
+      <key variable="citation-number"/>
     </sort>
 
     <layout suffix=".">
