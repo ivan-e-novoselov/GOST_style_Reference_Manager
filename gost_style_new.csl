@@ -5,8 +5,8 @@
        default-locale="ru-RU">
 
   <info>
-    <title>GOST Novoselov</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v5</id>
+    <title>GOST Novoselov (Mendeley Cite safe)</title>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v5-mendeley-safe</id>
     <author>
       <name>Ivan Novoselov</name>
     </author>
@@ -259,32 +259,14 @@
     </choose>
   </macro>
 
-    <citation collapse="citation-number">
-      <key variable="citation-number"/>
-
+  <!-- Mendeley Cite-safe: без sort/locator/language-логики -->
+  <citation collapse="citation-number">
     <layout prefix="[" suffix="]" delimiter=", ">
       <text variable="citation-number"/>
-      <choose>
-        <if variable="locator">
-          <group prefix=", " delimiter=" ">
-            <choose>
-              <if variable="language" match="any" value="ru">
-                <text value="с."/>
-              </if>
-              <else-if variable="language" match="any" value="ru-RU">
-                <text value="с."/>
-              </else-if>
-              <else>
-                <text value="p."/>
-              </else>
-            </choose>
-            <text variable="locator"/>
-          </group>
-        </if>
-      </choose>
     </layout>
   </citation>
 
+  <!-- Mendeley Cite-safe: без second-field-align -->
   <bibliography et-al-min="5" et-al-use-first="3" entry-spacing="0">
     <layout suffix=".">
       <text variable="citation-number" suffix=". "/>
@@ -391,9 +373,3 @@
   </bibliography>
 
 </style>
-
-
-
-
-
-
