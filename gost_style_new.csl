@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl"
        class="in-text"
-       version="1.0.1"
-       default-locale="ru-RU"
-       page-range-format="expanded">
+       version="1.0"
+       default-locale="ru-RU">
 
   <info>
     <title>GOST Novoselov</title>
@@ -261,9 +260,7 @@
   </macro>
 
     <citation collapse="citation-number">
-    <sort>
       <key variable="citation-number"/>
-    </sort>
 
     <layout prefix="[" suffix="]" delimiter=", ">
       <text variable="citation-number"/>
@@ -288,7 +285,7 @@
     </layout>
   </citation>
 
-  <bibliography et-al-min="5" et-al-use-first="3" entry-spacing="0" second-field-align="flush">
+  <bibliography et-al-min="5" et-al-use-first="3" entry-spacing="0">
     <layout suffix=".">
       <text variable="citation-number" suffix=". "/>
 
@@ -394,6 +391,7 @@
   </bibliography>
 
 </style>
+
 
 
 
