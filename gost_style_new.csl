@@ -6,8 +6,8 @@
        page-range-format="expanded">
 
   <info>
-    <title>GOST R 7.0.5–2008 (Numeric) — Novoselov</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v4</id>
+    <title>GOST Novoselov</title>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v5</id>
     <author>
       <name>Ivan Novoselov</name>
     </author>
@@ -391,5 +391,6 @@
   </bibliography>
 
 </style>
+
 
 
