@@ -260,8 +260,11 @@
     </choose>
   </macro>
 
-  <citation collapse="citation-number">
+    <citation collapse="citation-number">
+    <sort>
       <key variable="citation-number"/>
+    </sort>
+
     <layout prefix="[" suffix="]" delimiter=", ">
       <text variable="citation-number"/>
       <choose>
@@ -391,6 +394,7 @@
   </bibliography>
 
 </style>
+
 
 
 
