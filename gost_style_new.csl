@@ -3,12 +3,11 @@
        class="in-text"
        version="1.0"
        default-locale="ru-RU"
-       demote-non-dropping-particle="sort-only"
        page-range-format="expanded">
 
   <info>
     <title>GOST R 7.0.5–2008 (Numeric) — Novoselov</title>
-    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v3</id>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-custom-v4</id>
     <author>
       <name>Ivan Novoselov</name>
     </author>
@@ -262,9 +261,7 @@
   </macro>
 
   <citation collapse="citation-number">
-    <sort>
       <key variable="citation-number"/>
-    </sort>
     <layout prefix="[" suffix="]" delimiter=", ">
       <text variable="citation-number"/>
       <choose>
@@ -394,4 +391,5 @@
   </bibliography>
 
 </style>
+
 
