@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl"
        class="in-text"
-       version="1.0"
+       version="1.0.1"
        default-locale="ru-RU"
        page-range-format="expanded">
 
@@ -394,6 +394,7 @@
   </bibliography>
 
 </style>
+
 
 
 
