@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl"
+       class="in-text"
+       version="1.0"
+       default-locale="ru-RU">
+
+  <info>
+    <title>GOST R 7.0.5-2008 (Numeric) — Mendeley Cite safe</title>
+    <id>http://www.zotero.org/styles/gost-r-7-0-5-2008-numeric-ivan-novoselov-mendeley-safe</id>
+    <link href="https://raw.githubusercontent.com/ivan-e-novoselov/GOST_style_Reference_Manager/main/gost_numeric_mendeley_safe.csl" rel="self"/>
+    <author>
+      <name>Ivan Novoselov</name>
+    </author>
+    <category citation-format="numeric"/>
+    <category field="generic-base"/>
+    <updated>2026-02-22T00:00:00+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">
+      This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License
+    </rights>
+  </info>
+
+  <locale>
+    <terms>
+      <term name="page-range-delimiter">–</term>
+    </terms>
+  </locale>
+
+  <locale xml:lang="ru">
+    <terms>
+      <term name="et-al">и др.</term>
+      <term name="accessed">дата обращения</term>
+      <term name="page" form="short">с.</term>
+    </terms>
+  </locale>
+
+  <locale xml:lang="en">
+    <terms>
+      <term name="et-al">et al.</term>
+      <term name="accessed">date accessed</term>
+      <term name="page" form="short">p.</term>
+    </terms>
+  </locale>
+
+  <!-- ===== macros ===== -->
+
+  <macro name="year">
+    <date variable="issued">
+      <date-part name="year"/>
+    </date>
+  </macro>
+
+  <macro name="year-dot">
+    <text macro="year" suffix="."/>
+  </macro>
+
+  <macro name="doi">
+    <choose>
+      <if variable="DOI">
+        <text variable="DOI" prefix="https://doi.org/"/>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="title">
+    <text variable="title"/>
+  </macro>
+
+  <macro name="container-title">
+    <text variable="container-title"/>
+  </macro>
+
+  <macro name="first-author-surname-initials">
+    <names variable="author">
+      <name name-as-sort-order="first"
+            sort-separator=", "
+            initialize-with=". "
+            delimiter=", "
+            delimiter-precedes-last="always"/>
+      <substitute>
+        <text variable="title"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <macro name="authors-after-slash">
+    <names variable="author">
+      <name name-as-sort-order="none"
+            initialize-with=". "
+            delimiter=", "
+            delimiter-precedes-last="always"
+            et-al-min="5"
+            et-al-use-first="3"/>
+      <et-al prefix=" [" suffix="]" term="et-al"/>
+      <substitute>
+        <text variable="title"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <macro name="vol-dot">
+    <choose>
+      <if variable="volume">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="Т. "/>
+            <text variable="volume" suffix="."/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="Т. "/>
+            <text variable="volume" suffix="."/>
+          </else-if>
+          <else>
+            <text value="Vol. "/>
+            <text variable="volume" suffix="."/>
+          </else>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="issue-dot">
+    <choose>
+      <if variable="issue">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="№ "/>
+            <text variable="issue" suffix="."/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="№ "/>
+            <text variable="issue" suffix="."/>
+          </else-if>
+          <else>
+            <text value="No. "/>
+            <text variable="issue" suffix="."/>
+          </else>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="pages-dot">
+    <choose>
+      <if variable="page">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value="С. "/>
+            <text variable="page" suffix="."/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value="С. "/>
+            <text variable="page" suffix="."/>
+          </else-if>
+          <else>
+            <text value="P. "/>
+            <text variable="page" suffix="."/>
+          </else>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="publisher">
+    <group delimiter=" : ">
+      <text variable="publisher-place"/>
+      <text variable="publisher"/>
+    </group>
+  </macro>
+
+  <macro name="total-pages-dot">
+    <choose>
+      <if variable="number-of-pages">
+        <text variable="number-of-pages"/>
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text value=" с."/>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text value=" с."/>
+          </else-if>
+          <else>
+            <text value=" p."/>
+          </else>
+        </choose>
+        <text value="."/>
+      </if>
+    </choose>
+  </macro>
+
+  <macro name="url-access">
+    <choose>
+      <if variable="URL">
+        <choose>
+          <if variable="language" match="any" value="ru">
+            <text variable="URL" prefix="Режим доступа: "/>
+            <choose>
+              <if variable="accessed">
+                <group prefix=" (" suffix=").">
+                  <text term="accessed" suffix=": "/>
+                  <date variable="accessed">
+                    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="year"/>
+                  </date>
+                </group>
+              </if>
+              <else>
+                <text value="."/>
+              </else>
+            </choose>
+          </if>
+          <else-if variable="language" match="any" value="ru-RU">
+            <text variable="URL" prefix="Режим доступа: "/>
+            <choose>
+              <if variable="accessed">
+                <group prefix=" (" suffix=").">
+                  <text term="accessed" suffix=": "/>
+                  <date variable="accessed">
+                    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="year"/>
+                  </date>
+                </group>
+              </if>
+              <else>
+                <text value="."/>
+              </else>
+            </choose>
+          </else-if>
+          <else>
+            <text variable="URL" prefix="URL: "/>
+            <choose>
+              <if variable="accessed">
+                <group prefix=" (" suffix=").">
+                  <text term="accessed" suffix=": "/>
+                  <date variable="accessed">
+                    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+                    <date-part name="year"/>
+                  </date>
+                </group>
+              </if>
+              <else>
+                <text value="."/>
+              </else>
+            </choose>
+          </else>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+
+  <!-- ===== CITATION (Mendeley-safe: только номер, без locator/языковых choose/sort) ===== -->
+  <citation collapse="citation-number">
+    <layout prefix="[" suffix="]" delimiter=", ">
+      <text variable="citation-number"/>
+    </layout>
+  </citation>
+
+  <!-- ===== BIBLIOGRAPHY ===== -->
+  <bibliography et-al-min="5" et-al-use-first="3" entry-spacing="0">
+    <layout suffix=".">
+      <text variable="citation-number" suffix=". "/>
+
+      <choose>
+
+        <!-- journal -->
+        <if type="article-journal" match="any">
+          <group delimiter=" ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text macro="container-title" prefix=" // " suffix="."/>
+            </group>
+
+            <group delimiter=" – ">
+              <text macro="year-dot"/>
+              <text macro="vol-dot"/>
+              <text macro="issue-dot"/>
+              <text macro="pages-dot"/>
+            </group>
+
+            <text macro="doi"/>
+          </group>
+        </if>
+
+        <!-- conference -->
+        <else-if type="paper-conference" match="any">
+          <group delimiter=" ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text macro="container-title" prefix=" // " suffix="."/>
+            </group>
+
+            <group delimiter=" – ">
+              <text macro="year-dot"/>
+              <text macro="vol-dot"/>
+              <text macro="issue-dot"/>
+              <text macro="pages-dot"/>
+            </group>
+
+            <text macro="doi"/>
+          </group>
+        </else-if>
+
+        <!-- book -->
+        <else-if type="book" match="any">
+          <group delimiter=" – ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+            </group>
+            <text macro="publisher"/>
+            <text macro="year-dot"/>
+            <text macro="total-pages-dot"/>
+          </group>
+        </else-if>
+
+        <!-- thesis -->
+        <else-if type="thesis" match="any">
+          <group delimiter=" – ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text variable="genre"/>
+            </group>
+            <text variable="publisher-place"/>
+            <text macro="year-dot"/>
+          </group>
+        </else-if>
+
+        <!-- webpage -->
+        <else-if type="webpage" match="any">
+          <group delimiter=" – ">
+            <group>
+              <text macro="title" suffix="."/>
+            </group>
+            <text macro="url-access"/>
+          </group>
+        </else-if>
+
+        <!-- fallback -->
+        <else>
+          <group delimiter=" ">
+            <group>
+              <text macro="first-author-surname-initials" suffix=". "/>
+              <text macro="title"/>
+              <text macro="authors-after-slash" prefix=" / "/>
+              <text macro="container-title" prefix=" // " suffix="."/>
+            </group>
+
+            <group delimiter=" – ">
+              <text macro="year-dot"/>
+              <text macro="vol-dot"/>
+              <text macro="issue-dot"/>
+              <text macro="pages-dot"/>
+            </group>
+
+            <text macro="doi"/>
+          </group>
+        </else>
+
+      </choose>
+    </layout>
+  </bibliography>
+
+</style>
